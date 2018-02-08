@@ -6,7 +6,102 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-
+	
+	const statusStruct = {
+		200: "Success",
+		404: "Non Existant",
+		201: "Successfully Created",
+		204: "Successfully Updated",
+		400: "Bad Request"
+	}
+	
+	const handleResponse = (parseFlag, xhr) => {
+	
+		const content = document.querySelector("#content");
+	
+		const header = document.createElement('h1');
+		if(statusStruct[xhr.status]){
+			header.textContent = statusStruct[xhr.status];
+		} else {
+			header.textContent = "Unknown Error";
+		}
+		
+		content.innerHTML = "";
+		content.appendChild(header);
+		
+		if(parseFlag){
+		
+			const message = document.createElement('p');
+		
+			const parsedData = JSON.parse(xhr.response);
+			console.dir(parsedData);
+			
+			if(parsedData.message){
+				message.innerHTML = parsedData.message;
+				content.appendChild(message);
+			} else if(parsedData.users) {
+				message.innerHTML = JSON.stringify(parsedData.users);
+				content.appendChild(message);
+			}
+		}
+	};
+	
+	const postUser = (e, form) => {
+		const action = form.getAttribute("action");
+		const method = form.getAttribute("method");
+		
+		const name = form.querySelector("#nameField");
+		const age = form.querySelector("#ageField");
+		
+		const xhr = new XMLHttpRequest();
+		
+		xhr.open(method, action);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.setRequestHeader('Accept', 'application/json');
+		
+		xhr.onload = () => handleResponse(xhr.status !== 204, xhr);
+		
+		const data = `name=${name.value}&age=${age.value}`;
+		
+		xhr.send(data);
+		
+		e.preventDefault();
+		return false;
+	};
+	
+	const getUsers = (e, form) => {
+		const action = form.querySelector("#urlField").value;
+		const method = form.querySelector("#methodSelect").value;
+		
+		const xhr = new XMLHttpRequest();
+		
+		xhr.open(method, action);
+		xhr.setRequestHeader('Accept', 'application/json');
+		
+		//Depending on the method, parse the JSON (or don't)
+		xhr.onload = () => handleResponse(method === 'get', xhr);
+		
+		xhr.send();
+		
+		e.preventDefault();
+		return false;
+	};
+	
+	const init = () => {
+		const addUserForm = document.querySelector("#nameForm");
+		const getUsersForm = document.querySelector("#userForm");
+		
+		addUserForm.addEventListener('submit', (e) => {
+			postUser(e, addUserForm);
+		});
+		
+		getUsersForm.addEventListener('submit', (e) => {
+			getUsers(e, getUsersForm);
+		});
+	};
+	
+	window.onload = init;
+	
   </script>
 </head>
 <body>

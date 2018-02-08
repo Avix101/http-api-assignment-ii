@@ -1,0 +1,26 @@
+{
+  "name": "blans-http-api-assignment-ii",
+  "version": "1.0.0",
+  "description": "A simple http server that handles GET, HEAD, and POST requests",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avix101/http-api-assignment-ii.git"
+  },
+  "author": "Stasha Blank",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avix101/http-api-assignment-ii/issues"
+  },
+  "homepage": "https://github.com/Avix101/http-api-assignment-ii#readme",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
